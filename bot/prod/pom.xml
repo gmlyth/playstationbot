@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.playstationbot</groupId>
-  <artifactId>prod</artifactId>
+  <artifactId>psbot</artifactId>
   <version>1</version>
 
-  <name>prod</name>
+  <name>psbot</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
@@ -24,6 +24,18 @@
       <artifactId>junit</artifactId>
       <version>4.11</version>
       <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/net.dv8tion/JDA -->
+    <dependency>
+        <groupId>net.dv8tion</groupId>
+        <artifactId>JDA</artifactId>
+        <version>5.0.0-alpha.12</version>
+    </dependency>
+    <dependency>
+      <!-- jsoup HTML parser library @ https://jsoup.org/ -->
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>1.15.1</version>
     </dependency>
   </dependencies>
 
