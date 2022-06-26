@@ -20,7 +20,9 @@ public class PlaystationBot extends ListenerAdapter {
     private static HashMap<String, BlogPost> existingPosts = new HashMap<String, BlogPost>();
     
     public static void BuildPlaystationBot() {
-        String token = System.getenv("PLAYSTATIONBOT_TOKEN");
+        //String token = System.getenv("PLAYSTATIONBOT_TOKEN");
+
+        String token = SsmUtility.getSsmParameter("playstationbot-token");
 
         try {
             jda = JDABuilder.createDefault(token) // The token of the account that is logging in.
