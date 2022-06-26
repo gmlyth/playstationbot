@@ -1,0 +1,87 @@
+Parameters:
+  PlaystationBotToken:
+    Type: String
+    Default: Get it from Discord if you don't have it. Don't just make it up.
+    Description: Enter the token for your Playstation bot.
+
+Resources:
+
+  PlaystationBotTokenParameter:
+    Type: AWS::SSM::Parameter
+    Properties: 
+      Description: PlaystationBot Token
+      Name: playstationbot-token
+      Type: String
+      Value: !Ref PlaystationBotToken
+
+  EmojiTable: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: PlaystationBotEmoji 
+      AttributeDefinitions: 
+        - AttributeName: guild_id
+          AttributeType: N
+        - AttributeName: emoji_id
+          AttributeType: N          
+      KeySchema: 
+        - AttributeName: guild_id
+          KeyType: HASH   
+        - AttributeName: emoji_id
+          KeyType: RANGE         
+      Tags:
+          - Key: Vendor
+            Value: PlaystationBot
+          - Key: Name
+            Value: PlaystationBotEmoji    
+
+  SettingTable: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: PlaystationBotSetting
+      AttributeDefinitions: 
+        - AttributeName: guild_id
+          AttributeType: N
+        - AttributeName: setting_id
+          AttributeType: S        
+      KeySchema: 
+        - AttributeName: guild_id
+          KeyType: HASH   
+        - AttributeName: setting_id
+          KeyType: RANGE         
+      Tags:
+          - Key: Vendor
+            Value: PlaystationBot
+          - Key: Name
+            Value: PlaystationBotSetting   
+
+  BlogPostTable: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: PlaystationBotBlogPost
+      AttributeDefinitions: 
+        - AttributeName: month
+          AttributeType: N
+        - AttributeName: published
+          AttributeType: N       
+      KeySchema: 
+        - AttributeName: month
+          KeyType: HASH   
+        - AttributeName: published
+          KeyType: RANGE         
+      Tags:
+          - Key: Vendor
+            Value: PlaystationBot
+          - Key: Name
+            Value: PlaystationBotBlogPost  
