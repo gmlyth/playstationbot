@@ -7,8 +7,9 @@ public class BlogPost {
     private int postId;
     private String postLink = null;
     private String title = null;
+    private String description = null;
     private Date publishedTime;
-    private Date updatedTime;
+    //private Date updatedTime;
     private HashSet<String> tags = new HashSet<String>();
 
     public BlogPost(String postId, String postLink) {
@@ -58,13 +59,21 @@ public class BlogPost {
         this.publishedTime = value;
     }
 
-    public Date getUpdatedTime() {
-        return this.updatedTime;
+    public String getDescription() {
+        return this.description;
     }
 
-    public void setUpdatedTime(Date value) {
-        this.updatedTime = value;
-    }   
+    public void setDescription(String value) {
+        this.description = value;
+    }
+
+    // public Date getUpdatedTime() {
+    //     return this.updatedTime;
+    // }
+
+    // public void setUpdatedTime(Date value) {
+    //     this.updatedTime = value;
+    // }   
     
     public void addTag(String value) {
         this.tags.add(value);

@@ -52,11 +52,8 @@ public class PlaystationBot extends ListenerAdapter {
         List<BlogPost> posts = BlogParser.getBlogPosts("https://blog.playstation.com");
 
         for(BlogPost post : posts) {
-            if(BlogCache.needToPost(post)) {
-                postArticle(post);
-            }
+            postArticle(post);
         }
-        System.out.println("Got here");
     }
 
     private static void postArticle(BlogPost post) {
