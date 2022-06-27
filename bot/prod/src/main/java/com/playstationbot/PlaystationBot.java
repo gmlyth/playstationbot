@@ -17,7 +17,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class PlaystationBot extends ListenerAdapter {
     private static JDA jda = null;
-    private static HashMap<String, BlogPost> existingPosts = new HashMap<String, BlogPost>();
     
     public static void BuildPlaystationBot() {
         //String token = System.getenv("PLAYSTATIONBOT_TOKEN");
@@ -53,9 +52,8 @@ public class PlaystationBot extends ListenerAdapter {
         List<BlogPost> posts = BlogParser.getBlogPosts("https://blog.playstation.com");
 
         for(BlogPost post : posts) {
-            if(existingPosts.get(post.getPostId()) == null) {
+            if(BlogCache.needToPost(post)) {
                 postArticle(post);
-                existingPosts.put(post.getPostId(), post);
             }
         }
         System.out.println("Got here");
