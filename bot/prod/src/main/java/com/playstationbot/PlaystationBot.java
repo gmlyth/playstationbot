@@ -8,10 +8,12 @@ import org.apache.commons.collections4.OrderedMap;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -30,6 +32,9 @@ public class PlaystationBot extends ListenerAdapter {
             jda = JDABuilder.createDefault(token) // The token of the account that is logging in.
                     .addEventListeners(new PlaystationBot())   // An instance of a class that will handle events.
                     .build();
+
+                    jda.upsertCommand("setchannel", "Set the channel for the bot to post in").queue(); // This can take up to 1 hour to show up in the client
+            
             jda.awaitReady(); // Blocking guarantees that JDA will be completely loaded.
         } catch (LoginException e) {
             // TODO Auto-generated catch block
@@ -76,10 +81,21 @@ public class PlaystationBot extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event)
     {
         Message msg = event.getMessage();
-        if (msg.getContentRaw().equals("!ping"))
-        {
-            MessageChannel channel = event.getChannel();
-            channel.sendMessage("Pong!"); /* => RestAction<Message> */
-        }
+        // if (msg.getContentRaw().equals("!ping"))
+        // {
+        //     MessageChannel channel = event.getChannel();
+        //     channel.sendMessage("Pong!"); /* => RestAction<Message> */
+        // }
+    }
+
+    @Override
+    public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
+    {
+        if (!event.getName().equals("setchannel")) return; // make sure we handle the right command
+        long time = System.currentTimeMillis();
+        event.reply("Pong!").setEphemeral(true) // reply or acknowledge
+                .flatMap(v ->
+                        event.getHook().editOriginalFormat("Pong: %d ms", System.currentTimeMillis() - time) // then edit original
+                ).queue(); // Queue both reply and edit
     }
 }
