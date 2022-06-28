@@ -11,7 +11,8 @@ public class BlogCache {
     static boolean needToPost(BlogPost post) {
         boolean result = true;
 
-        if(blogPostMap.containsKey(post.getPostId()));
+        if(blogPostMap.containsKey(post.getPostId()))
+            result = false;
 
         return result;
     }
