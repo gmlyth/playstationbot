@@ -1,6 +1,8 @@
 package com.playstationbot;
 
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.ContainerCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ssm.SsmClient;
 import software.amazon.awssdk.services.ssm.model.GetParameterRequest;
@@ -14,7 +16,9 @@ public class SsmUtility {
         Region region = Region.US_EAST_2;
         SsmClient ssmClient = SsmClient.builder()
                 .region(region)
-                .credentialsProvider(ProfileCredentialsProvider.create())
+                .credentialsProvider(DefaultCredentialsProvider.create())
+                //.credentialsprovider(ContainerCredentialsProvider.create()) use when running on FARGATE.
+                //.credentialsProvider(EnvironmentVariableCredentialsProvider.create()) use for testing discord locally.
                 .build();
 
         try {

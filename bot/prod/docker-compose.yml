@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  prod:
+    image: psbot
+    build:
+      context: .
+      dockerfile: ./Dockerfile

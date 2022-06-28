@@ -21,6 +21,9 @@ public class PlaystationBot extends ListenerAdapter {
     public static void BuildPlaystationBot() {
         //String token = System.getenv("PLAYSTATIONBOT_TOKEN");
 
+        System.out.println("hello!!!");
+        System.out.println(System.getenv("AWS_ACCESS_KEY_ID"));
+
         String token = SsmUtility.getSsmParameter("playstationbot-token");
 
         try {

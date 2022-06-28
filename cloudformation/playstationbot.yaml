@@ -85,3 +85,38 @@ Resources:
             Value: PlaystationBot
           - Key: Name
             Value: PlaystationBotBlogPost  
+
+  PlaystationBotTaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Sid: ''
+          Effect: Allow
+          Principal:
+            Service: ecs-tasks.amazonaws.com
+          Action: sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:  
+              - Effect: Allow
+                Action: "dynamodb:*"
+                #arnrewrite
+                Resource: 
+                  - !GetAtt SettingTable.Arn
+                  - !GetAtt EmojiTable.Arn
+                  - !GetAtt BlogPostTable.Arn
+              - Effect: Allow
+                Action: "ssm:*"
+                #arnrewrite
+                Resource: 
+                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/playstationbot-token         
+      Tags:
+          - Key: Vendor
+            Value: PlaystationBot
+          - Key: Name
+            Value: PlaystationBotTaskRole 
