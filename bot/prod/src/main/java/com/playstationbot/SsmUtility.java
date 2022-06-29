@@ -17,9 +17,9 @@ public class SsmUtility {
         SsmClient ssmClient = SsmClient.builder()
                 .region(region)
                 //IMPORTANT! Unloke boto3, the java sdk needs a specific "credentials provider"
-                .credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
+                //.credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
                 //.credentialsprovider(ContainerCredentialsProvider.create()) //use when running on FARGATE.
-                //.credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use for testing docker locally.
+                .credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use for testing docker locally.
                 .build();
 
         try {

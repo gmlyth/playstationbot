@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
@@ -27,9 +28,9 @@ public class DynamoDbUtility {
         DynamoDbClient client = DynamoDbClient.builder()
             .region(region)
             //IMPORTANT! Unloke boto3, the java sdk needs a specific "credentials provider"
-            .credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
+            //.credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
             //.credentialsprovider(ContainerCredentialsProvider.create()) //use when running on FARGATE.
-            //.credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use for testing docker locally.
+            .credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use for testing docker locally.
             .build();
 
         ScanRequest scanRequest = ScanRequest.builder().tableName("PlaystationBotBlogPost").build();
@@ -64,9 +65,9 @@ public class DynamoDbUtility {
         DynamoDbClient client = DynamoDbClient.builder()
             .region(region)
             //IMPORTANT! Unloke boto3, the java sdk needs a specific "credentials provider"
-            .credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
+            //.credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
             //.credentialsprovider(ContainerCredentialsProvider.create()) //use when running on FARGATE.
-            //.credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use for testing docker locally.
+            .credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use for testing docker locally.
             .build();
 
         ScanRequest scanRequest = ScanRequest.builder().tableName("PlaystationBotGuildSetting").build();
@@ -91,10 +92,10 @@ public class DynamoDbUtility {
         DynamoDbClient client = DynamoDbClient.builder()
                 .region(region)
                 // IMPORTANT! Unloke boto3, the java sdk needs a specific "credentials provider"
-                .credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
+                //.credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
                 // .credentialsprovider(ContainerCredentialsProvider.create()) //use when
                 // running on FARGATE.
-                // .credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use
+                 .credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use
                 // for testing docker locally.
                 .build();
 
@@ -124,10 +125,10 @@ public class DynamoDbUtility {
         DynamoDbClient client = DynamoDbClient.builder()
                 .region(region)
                 // IMPORTANT! Unloke boto3, the java sdk needs a specific "credentials provider"
-                .credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
+                //.credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
                 // .credentialsprovider(ContainerCredentialsProvider.create()) //use when
                 // running on FARGATE.
-                // .credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use
+                 .credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use
                 // for testing docker locally.
                 .build();
 
