@@ -16,6 +16,11 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public class PlaystationBot extends ListenerAdapter {
     private static JDA jda = null;
@@ -33,7 +38,19 @@ public class PlaystationBot extends ListenerAdapter {
                     .addEventListeners(new PlaystationBot())   // An instance of a class that will handle events.
                     .build();
 
-                    jda.upsertCommand("setchannel", "Set the channel for the bot to post in").queue(); // This can take up to 1 hour to show up in the client
+                    List<SlashCommandData> commands = new ArrayList<SlashCommandData>();
+                    SlashCommandData commandData = Commands.slash("setchannel", "Set the channel for the bot to post in");
+                    commandData.addOption(OptionType.STRING, "channelname", "The name of the channel (no # please)");
+                    commands.add(commandData);
+
+                    commandData = Commands.slash("getchannel", "View the channel the bot posts in");
+                    commands.add(commandData);
+
+                    for(SlashCommandData command : commands) {
+                        jda.upsertCommand(command).queue(); // This can take up to 1 hour to show up in the client
+                    }
+
+            SettingCache.initializeFromDynamoDb();
             
             jda.awaitReady(); // Blocking guarantees that JDA will be completely loaded.
         } catch (LoginException e) {
@@ -68,7 +85,7 @@ public class PlaystationBot extends ListenerAdapter {
         for(Guild guild : jda.getGuilds()) {
             try
             {
-                TextChannel channel = guild.getTextChannelsByName("general", true).get(0);
+                TextChannel channel = guild.getTextChannelsByName(SettingCache.getSetting(guild.getId(), "channelname"), true).get(0);
                 channel.sendMessage(post.getPostLink()).queue();
             }
             catch (Exception ex) {
@@ -91,11 +108,13 @@ public class PlaystationBot extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
     {
-        if (!event.getName().equals("setchannel")) return; // make sure we handle the right command
-        long time = System.currentTimeMillis();
-        event.reply("Pong!").setEphemeral(true) // reply or acknowledge
-                .flatMap(v ->
-                        event.getHook().editOriginalFormat("Pong: %d ms", System.currentTimeMillis() - time) // then edit original
-                ).queue(); // Queue both reply and edit
+        if(event.getName().equals("setchannel")) {
+            String channelName = event.getInteraction().getOption("channelname").getAsString();
+            SettingCache.insertSetting(event.getGuild().getId(), "channelname", channelName, true);
+            event.getChannel().sendMessage("PlaystationBot will now post in #" + channelName).queue();
+        }
+        else if (event.getName().equals("getchannel")) {
+            event.getChannel().sendMessage(SettingCache.getSetting(event.getGuild().getId(), "channelname")).queue();
+        }
     }
 }

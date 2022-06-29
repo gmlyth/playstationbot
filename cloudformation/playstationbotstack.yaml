@@ -38,6 +38,26 @@ Resources:
           - Key: Name
             Value: PlaystationBotEmoji    
 
+  TagTable: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: PlaystationBotTag
+      AttributeDefinitions: 
+        - AttributeName: tag
+          AttributeType: S         
+      KeySchema: 
+        - AttributeName: tag
+          KeyType: HASH         
+      Tags:
+          - Key: Vendor
+            Value: PlaystationBot
+          - Key: Name
+            Value: PlaystationBotTag              
+
   SettingTable: 
     Type: AWS::DynamoDB::Table
     Properties: 
@@ -45,22 +65,22 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      TableName: PlaystationBotSetting
+      TableName: PlaystationBotGuildSetting
       AttributeDefinitions: 
         - AttributeName: guild_id
           AttributeType: N
-        - AttributeName: setting_id
+        - AttributeName: setting_key
           AttributeType: S        
       KeySchema: 
         - AttributeName: guild_id
           KeyType: HASH   
-        - AttributeName: setting_id
+        - AttributeName: setting_key
           KeyType: RANGE         
       Tags:
           - Key: Vendor
             Value: PlaystationBot
           - Key: Name
-            Value: PlaystationBotSetting   
+            Value: PlaystationBotGuildSetting   
 
   BlogPostTable: 
     Type: AWS::DynamoDB::Table
@@ -71,12 +91,12 @@ Resources:
         WriteCapacityUnits: 1
       TableName: PlaystationBotBlogPost
       AttributeDefinitions: 
-        - AttributeName: month
+        - AttributeName: post_id
           AttributeType: N
         - AttributeName: published
           AttributeType: N       
       KeySchema: 
-        - AttributeName: month
+        - AttributeName: post_id
           KeyType: HASH   
         - AttributeName: published
           KeyType: RANGE         
