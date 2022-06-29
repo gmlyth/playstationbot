@@ -51,6 +51,7 @@ public class PlaystationBot extends ListenerAdapter {
                     }
 
             SettingCache.initializeFromDynamoDb();
+            BlogCache.initializeFromDynamoDb();
             
             jda.awaitReady(); // Blocking guarantees that JDA will be completely loaded.
         } catch (LoginException e) {

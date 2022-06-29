@@ -22,15 +22,8 @@ public class BlogCache {
         if (blogPostMap.containsKey(post.getPostId()) == false) {
             insertBlogPost(post);
 
-            //insert to dynamodb!
-            //TODO
+            DynamoDbUtility.upsertBlogPost(post);
         }
-
-        //2. if we DO have a matching post, see if the updated date is newer. if so, let's 
-        //update the cache item, update dynamo db, and return true.
-        // else if (post.getUpdatedTime() != null && post.getUpdatedTime().compareTo(blogPostMap.get(post.getPostId()).getUpdatedTime()) > 0) {
-        //     ///we need to update!!!
-        // }
     }
 
     //This is gonna be O(1) in all cases.
@@ -70,7 +63,11 @@ public class BlogCache {
     }
 
     //This is gonna be O(n)
-    private static void initializeFromDynamoDb() {
+    public static void initializeFromDynamoDb() {
+        List<BlogPost> posts = DynamoDbUtility.getBlogPostItems();
 
+        for(BlogPost post : posts) {
+            insertBlogPost(post);
+        }
     }
 }

@@ -94,7 +94,7 @@ Resources:
         - AttributeName: post_id
           AttributeType: N
         - AttributeName: published
-          AttributeType: N       
+          AttributeType: S       
       KeySchema: 
         - AttributeName: post_id
           KeyType: HASH   
