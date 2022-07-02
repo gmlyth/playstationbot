@@ -48,10 +48,14 @@ Resources:
       TableName: PlaystationBotTag
       AttributeDefinitions: 
         - AttributeName: tag
-          AttributeType: S         
+          AttributeType: S       
+        - AttributeName: last_seen
+          AttributeType: S        
       KeySchema: 
         - AttributeName: tag
-          KeyType: HASH         
+          KeyType: HASH  
+        - AttributeName: last_seen
+          KeyType: RANGE         
       Tags:
           - Key: Vendor
             Value: PlaystationBot

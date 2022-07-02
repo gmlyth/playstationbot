@@ -15,7 +15,7 @@ public class Tag {
     }
 
     public Date getLastSeen() {
-        return this.getLastSeen();
+        return this.lastSeen;
     }
 
     public void setLastSeen(Date value) {

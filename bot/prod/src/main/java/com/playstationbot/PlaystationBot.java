@@ -80,6 +80,7 @@ public class PlaystationBot extends ListenerAdapter {
     public static void checkForPosts() {
         List<BlogPost> posts = BlogParser.getBlogPosts("https://blog.playstation.com");
 
+
         for(BlogPost post : posts) {
             postArticle(post);
         }
