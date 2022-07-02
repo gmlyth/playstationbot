@@ -46,6 +46,9 @@ public class PlaystationBot extends ListenerAdapter {
                     commandData = Commands.slash("getchannel", "View the channel the bot posts in");
                     commands.add(commandData);
 
+                    commandData = Commands.slash("gettags", "View the list of available tags");
+                    commands.add(commandData);
+
                     for(SlashCommandData command : commands) {
                         jda.upsertCommand(command).queue(); // This can take up to 1 hour to show up in the client
                     }
@@ -116,6 +119,9 @@ public class PlaystationBot extends ListenerAdapter {
         }
         else if (event.getName().equals("getchannel")) {
             event.getChannel().sendMessage(SettingCache.getSetting(event.getGuild().getId(), "channelname")).queue();
+        }
+        else if (event.getName().equals("gettags")) {
+            event.getChannel().sendMessage(TagCache.getTagList()).queue();
         }
     }
 }

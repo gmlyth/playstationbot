@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class SettingCache {
     private static HashMap<String, HashMap<String, String>> settingMap = initializeFromDynamoDb();;
 
-    //This is gonna be O(n) in theory, except...we're stopping at 50 records so it's really O(1).
+    //This is gonna be O(n). We only keep 50 records but we iterate through them all to make sure we have the 50 most recent.
     public static HashMap<String, HashMap<String, String>> initializeFromDynamoDb() {
         return DynamoDbUtility.getSettingItems();
     }

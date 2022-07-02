@@ -28,9 +28,9 @@ public class DynamoDbUtility {
         DynamoDbClient client = DynamoDbClient.builder()
             .region(region)
             //IMPORTANT! Unloke boto3, the java sdk needs a specific "credentials provider"
-            //.credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
+            .credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
             //.credentialsprovider(ContainerCredentialsProvider.create()) //use when running on FARGATE.
-            .credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use for testing docker locally.
+            //.credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use for testing docker locally.
             .build();
 
         ScanRequest scanRequest = ScanRequest.builder().tableName("PlaystationBotBlogPost").build();
@@ -58,6 +58,38 @@ public class DynamoDbUtility {
         return results;
     }
 
+    public static HashMap<String, Tag> getTagItems() {
+        HashMap<String, Tag> results = new HashMap<String, Tag>();
+
+        Region region = Region.US_EAST_2;
+        DynamoDbClient client = DynamoDbClient.builder()
+            .region(region)
+            //IMPORTANT! Unloke boto3, the java sdk needs a specific "credentials provider"
+            .credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
+            //.credentialsprovider(ContainerCredentialsProvider.create()) //use when running on FARGATE.
+            //.credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use for testing docker locally.
+            .build();
+
+        ScanRequest scanRequest = ScanRequest.builder().tableName("PlaystationBotTag").build();
+
+        ScanResponse result = client.scan(scanRequest);
+        for (Map<String, AttributeValue> item : result.items()){
+            AttributeValue tagVal = item.get("tag");
+            AttributeValue lastSeenVal = item.get("last_seen");
+
+            Tag tag = new Tag(tagVal.s());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+            try {
+                tag.setLastSeen(sdf.parse(lastSeenVal.s()));
+            } catch (ParseException e) {
+                continue;
+            }
+            results.put(tag.getTag(), tag);
+        }
+        
+        return results;
+    }
+
     public static HashMap<String,HashMap<String, String>> getSettingItems() {
         HashMap<String,HashMap<String, String>>results = new HashMap<String,HashMap<String, String>>();
 
@@ -65,9 +97,9 @@ public class DynamoDbUtility {
         DynamoDbClient client = DynamoDbClient.builder()
             .region(region)
             //IMPORTANT! Unloke boto3, the java sdk needs a specific "credentials provider"
-            //.credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
+            .credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
             //.credentialsprovider(ContainerCredentialsProvider.create()) //use when running on FARGATE.
-            .credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use for testing docker locally.
+            //.credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use for testing docker locally.
             .build();
 
         ScanRequest scanRequest = ScanRequest.builder().tableName("PlaystationBotGuildSetting").build();
@@ -92,10 +124,10 @@ public class DynamoDbUtility {
         DynamoDbClient client = DynamoDbClient.builder()
                 .region(region)
                 // IMPORTANT! Unloke boto3, the java sdk needs a specific "credentials provider"
-                //.credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
+                .credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
                 // .credentialsprovider(ContainerCredentialsProvider.create()) //use when
                 // running on FARGATE.
-                 .credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use
+                //.credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use
                 // for testing docker locally.
                 .build();
 
@@ -120,15 +152,45 @@ public class DynamoDbUtility {
         client.updateItem(request); //Upsert
     }
 
+    public static void upsertTag(Tag tag) {
+        Region region = Region.US_EAST_2;
+        DynamoDbClient client = DynamoDbClient.builder()
+                .region(region)
+                // IMPORTANT! Unloke boto3, the java sdk needs a specific "credentials provider"
+                .credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
+                // .credentialsprovider(ContainerCredentialsProvider.create()) //use when
+                // running on FARGATE.
+                //.credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use
+                // for testing docker locally.
+                .build();
+
+        HashMap<String, AttributeValue> keyMap = new HashMap<String, AttributeValue>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        String lastSeenString = sdf.format(tag.getLastSeen());
+
+        keyMap.put("tag", AttributeValue.builder().s(String.valueOf(tag.getTag())).build());
+        keyMap.put("last_seen", AttributeValue.builder().s(lastSeenString).build());
+
+        HashMap<String, AttributeValueUpdate> attributeMap = new HashMap<String, AttributeValueUpdate>();
+
+        UpdateItemRequest request = UpdateItemRequest.builder()
+                .tableName("PlaystationBotTag")
+                .key(keyMap)
+                .attributeUpdates(attributeMap)
+                .build();
+
+        client.updateItem(request); //Upsert
+    }
+
     public static void upsertBlogPost(BlogPost post) {
         Region region = Region.US_EAST_2;
         DynamoDbClient client = DynamoDbClient.builder()
                 .region(region)
                 // IMPORTANT! Unloke boto3, the java sdk needs a specific "credentials provider"
-                //.credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
+                .credentialsProvider(DefaultCredentialsProvider.create()) // use when debugging in VSCODE.
                 // .credentialsprovider(ContainerCredentialsProvider.create()) //use when
                 // running on FARGATE.
-                 .credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use
+                //.credentialsProvider(EnvironmentVariableCredentialsProvider.create()) //use
                 // for testing docker locally.
                 .build();
 

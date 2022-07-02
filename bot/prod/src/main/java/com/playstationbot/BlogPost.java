@@ -82,4 +82,10 @@ public class BlogPost {
     public HashSet<String> getTags() {
         return this.tags;
     }
+
+    public void insertTags() {
+        for(String tag : this.tags) {
+            TagCache.insertTag(tag, this.publishedTime, true);
+        }
+    }
 }

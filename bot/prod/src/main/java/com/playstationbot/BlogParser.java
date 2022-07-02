@@ -36,6 +36,9 @@ public class BlogParser {
                     BlogCache.addPost(post);
 
                     results.add(post);
+
+                    //Save any tags to the cache + database.
+                    post.insertTags();
                 }
             }
         } catch (IOException e) {
